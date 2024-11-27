@@ -4,6 +4,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Default User Details
+    |--------------------------------------------------------------------------
+    |
+    | With Reference to the Technical Assignment. The Code Below is one of the requirements
+    | The first user’s Name, Email & Password should be created from variables that are configurable by the developer
+    | in the .env file so that when the default user logs in there is some data to view.
+    |
+    | This is the best practice to configure these details
+    |
+    */
+
+    'user_full_name' => env('USER_FULL_NAME', 'Default User'),
+    'user_email' => env('USER_EMAIL', 'default@example.com'),
+    'user_password' => env('USER_PASSWORD', 'password'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
     |
