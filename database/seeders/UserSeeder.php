@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'name' => config('app.user_full_name'),
+                'phone' => '0775093623',
                 'email' => config('app.user_email'),
                 'email_verified_at' => now(),
                 'password' => Hash::make(config('app.user_password')),
@@ -28,10 +29,11 @@ class UserSeeder extends Seeder
             ],
         ];
 
-        for ($i = 2; $i <= 50; $i++) {
+        for ($i = 2; $i <= 20; $i++) {
             $users[] = [
                 'name' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
+                'phone' => $faker->unique()->phoneNumber,
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'remember_token' => null,
