@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class UserTable extends Component
@@ -15,6 +16,7 @@ class UserTable extends Component
     public $phone;
     public $password;
     public $isEdit = false;
+    public $showAddModal = false;
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -23,10 +25,35 @@ class UserTable extends Component
         'password' => 'required|string|min:8'
     ];
 
-    public function render()
+    public function render(): View
     {
         $this->users = User::all();
         return view('livewire.user-table');
+    }
+
+    public function showAddModal(): void
+    {
+        $this->resetFields();
+        $this->showAddModal = true;
+    }
+
+    public function hideAddModal(): void
+    {
+        $this->showAddModal = false;
+    }
+
+    public function resetFields(): void
+    {
+        $this->name = '';
+        $this->email = '';
+        $this->phone = '';
+        $this->password = '';
+        $this->isEdit = false;
+    }
+
+    public function showEditModal(): void
+    {
+        $this->isEdit = true;
     }
 
     public function selectUser(User $user): void
@@ -41,11 +68,13 @@ class UserTable extends Component
     public function update(): void
     {
         $this->validate([
+            'name' => 'required|string|max:255',
             'email' => [
                 'required',
                 'email',
                 Rule::unique('users')->ignore($this->selectedUser->id),
             ],
+            'phone' => 'required|digits:11|starts_with:07',
         ]);
 
         $this->selectedUser->update([
@@ -56,21 +85,20 @@ class UserTable extends Component
         ]);
 
         $this->resetFields();
+        $this->hideEditModal();
     }
 
-    public function resetFields(): void
+    public function hideEditModal(): void
     {
-        $this->name = '';
-        $this->email = '';
-        $this->phone = '';
-        $this->password = '';
         $this->isEdit = false;
+        $this->selectedUser = null;
     }
 
     public function delete(User $user): void
     {
         $user->delete();
         $this->resetFields();
+        $this->hideEditModal();
     }
 
     public function create(): void
@@ -85,5 +113,6 @@ class UserTable extends Component
         ]);
 
         $this->resetFields();
+        $this->hideAddModal();
     }
 }
