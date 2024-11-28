@@ -43,7 +43,6 @@ class Parser extends Core
         'BACKUP' => 'PhpMyAdmin\\SqlParser\\Statements\\BackupStatement',
         'CHECK' => 'PhpMyAdmin\\SqlParser\\Statements\\CheckStatement',
         'CHECKSUM' => 'PhpMyAdmin\\SqlParser\\Statements\\ChecksumStatement',
-        'KILL' => 'PhpMyAdmin\\SqlParser\\Statements\\KillStatement',
         'OPTIMIZE' => 'PhpMyAdmin\\SqlParser\\Statements\\OptimizeStatement',
         'REPAIR' => 'PhpMyAdmin\\SqlParser\\Statements\\RepairStatement',
         'RESTORE' => 'PhpMyAdmin\\SqlParser\\Statements\\RestoreStatement',
@@ -116,10 +115,6 @@ class Parser extends Core
         '_END_OPTIONS' => [
             'class' => 'PhpMyAdmin\\SqlParser\\Components\\OptionsArray',
             'field' => 'end_options',
-        ],
-        '_GROUP_OPTIONS' => [
-            'class' => 'PhpMyAdmin\\SqlParser\\Components\\OptionsArray',
-            'field' => 'group_options',
         ],
 
         'INTERSECT' => [

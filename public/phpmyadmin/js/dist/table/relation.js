@@ -91,7 +91,7 @@ TableRelation.getDropdownValues = function ($dropdown) {
     url: 'index.php?route=/table/relation',
     data: params,
     dataType: 'json',
-    success: function success(data) {
+    success: function (data) {
       Functions.ajaxRemoveMessage($msgbox);
       if (typeof data !== 'undefined' && data.success) {
         // if the changed dropdown is a database selector

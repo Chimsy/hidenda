@@ -205,17 +205,15 @@ class ShapeFile
         $min = $type . 'min';
         $max = $type . 'max';
 
-        if (
-            ! isset($this->boundingBox[$min])
-            || $this->boundingBox[$min] == 0.0 // phpcs:ignore SlevomatCodingStandard.Operators.DisallowEqualOperators
+        if (! isset($this->boundingBox[$min])
+            || $this->boundingBox[$min] == 0.0
             || ($this->boundingBox[$min] > $data[$min])
         ) {
             $this->boundingBox[$min] = $data[$min];
         }
 
-        if (
-            isset($this->boundingBox[$max])
-            && $this->boundingBox[$max] != 0.0 // phpcs:ignore SlevomatCodingStandard.Operators.DisallowEqualOperators
+        if (isset($this->boundingBox[$max])
+            && $this->boundingBox[$max] != 0.0
             && ($this->boundingBox[$max] >= $data[$max])
         ) {
             return;
@@ -231,7 +229,7 @@ class ShapeFile
      */
     public function addRecord(ShapeRecord $record): int
     {
-        if ($this->dbfHeader !== null) {
+        if (isset($this->dbfHeader) && (is_array($this->dbfHeader))) {
             $record->updateDBFInfo($this->dbfHeader);
         }
 
@@ -310,8 +308,7 @@ class ShapeFile
     public function getIndexFromDBFData(string $field, $value): int
     {
         foreach ($this->records as $index => $record) {
-            if (
-                isset($record->dbfData[$field]) &&
+            if (isset($record->dbfData[$field]) &&
                 (trim(strtoupper($record->dbfData[$field])) === strtoupper($value))
             ) {
                 return $index;
@@ -694,7 +691,6 @@ class ShapeFile
      */
     public function hasMeasure(): bool
     {
-        // phpcs:ignore SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedNotEqualOperator
         return $this->boundingBox['mmin'] != 0 || $this->boundingBox['mmax'] != 0;
     }
 }

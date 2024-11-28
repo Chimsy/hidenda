@@ -92,10 +92,6 @@ class ArrayObj extends Component
 
             // End of statement.
             if ($token->type === Token::TYPE_DELIMITER) {
-                if ($brackets > 0) {
-                    $parser->error('A closing bracket was expected.', $token);
-                }
-
                 break;
             }
 
@@ -128,9 +124,9 @@ class ArrayObj extends Component
                             $ret->values[] = trim($lastValue);
                             $lastRaw = $lastValue = '';
                         }
-
-                        continue;
                     }
+
+                    continue;
                 }
             }
 

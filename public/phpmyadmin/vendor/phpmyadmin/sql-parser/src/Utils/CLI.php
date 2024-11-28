@@ -24,30 +24,6 @@ use const STDIN;
  */
 class CLI
 {
-    public function run(): int
-    {
-        $params = $this->getopt('', ['lint', 'highlight', 'tokenize']);
-        if ($params !== false) {
-            if (isset($params['lint'])) {
-                return $this->runLint(false);
-            }
-
-            if (isset($params['highlight'])) {
-                return $this->runHighlight(false);
-            }
-
-            if (isset($params['tokenize'])) {
-                return $this->runTokenize(false);
-            }
-        }
-
-        $this->usageLint(false);
-        $this->usageHighlight(false);
-        $this->usageTokenize(false);
-
-        return 1;
-    }
-
     /**
      * @param string[]|false[] $params
      * @param string[]         $longopts
@@ -69,12 +45,10 @@ class CLI
     /**
      * @return void
      */
-    public function usageHighlight(bool $isStandalone = true)
+    public function usageHighlight()
     {
-        $command = $isStandalone ? 'highlight-query' : 'sql-parser --highlight';
-
-        echo 'Usage: ' . $command . ' --query SQL [--format html|cli|text] [--ansi]' . "\n";
-        echo '       cat file.sql | ' . $command . "\n";
+        echo "Usage: highlight-query --query SQL [--format html|cli|text] [--ansi]\n";
+        echo "       cat file.sql | highlight-query\n";
     }
 
     /**
@@ -121,7 +95,7 @@ class CLI
     /**
      * @return int
      */
-    public function runHighlight(bool $isStandalone = true)
+    public function runHighlight()
     {
         $params = $this->parseHighlight();
         if ($params === false) {
@@ -129,7 +103,7 @@ class CLI
         }
 
         if (isset($params['h'])) {
-            $this->usageHighlight($isStandalone);
+            $this->usageHighlight();
 
             return 0;
         }
@@ -157,7 +131,7 @@ class CLI
         }
 
         echo "ERROR: Missing parameters!\n";
-        $this->usageHighlight($isStandalone);
+        $this->usageHighlight();
 
         return 1;
     }
@@ -165,12 +139,10 @@ class CLI
     /**
      * @return void
      */
-    public function usageLint(bool $isStandalone = true)
+    public function usageLint()
     {
-        $command = $isStandalone ? 'lint-query' : 'sql-parser --lint';
-
-        echo 'Usage: ' . $command . ' --query SQL [--ansi]' . "\n";
-        echo '       cat file.sql | ' . $command . "\n";
+        echo "Usage: lint-query --query SQL [--ansi]\n";
+        echo "       cat file.sql | lint-query\n";
     }
 
     /**
@@ -193,7 +165,7 @@ class CLI
     /**
      * @return int
      */
-    public function runLint(bool $isStandalone = true)
+    public function runLint()
     {
         $params = $this->parseLint();
         if ($params === false) {
@@ -201,7 +173,7 @@ class CLI
         }
 
         if (isset($params['h'])) {
-            $this->usageLint($isStandalone);
+            $this->usageLint();
 
             return 0;
         }
@@ -238,7 +210,7 @@ class CLI
         }
 
         echo "ERROR: Missing parameters!\n";
-        $this->usageLint($isStandalone);
+        $this->usageLint();
 
         return 1;
     }
@@ -246,12 +218,10 @@ class CLI
     /**
      * @return void
      */
-    public function usageTokenize(bool $isStandalone = true)
+    public function usageTokenize()
     {
-        $command = $isStandalone ? 'tokenize-query' : 'sql-parser --tokenize';
-
-        echo 'Usage: ' . $command . ' --query SQL [--ansi]' . "\n";
-        echo '       cat file.sql | ' . $command . "\n";
+        echo "Usage: tokenize-query --query SQL [--ansi]\n";
+        echo "       cat file.sql | tokenize-query\n";
     }
 
     /**
@@ -273,7 +243,7 @@ class CLI
     /**
      * @return int
      */
-    public function runTokenize(bool $isStandalone = true)
+    public function runTokenize()
     {
         $params = $this->parseTokenize();
         if ($params === false) {
@@ -281,7 +251,7 @@ class CLI
         }
 
         if (isset($params['h'])) {
-            $this->usageTokenize($isStandalone);
+            $this->usageTokenize();
 
             return 0;
         }
@@ -317,7 +287,7 @@ class CLI
         }
 
         echo "ERROR: Missing parameters!\n";
-        $this->usageTokenize($isStandalone);
+        $this->usageTokenize();
 
         return 1;
     }

@@ -16,7 +16,7 @@ var configScriptLoaded;
  * @return {boolean}
  */
 function isStorageSupported(type) {
-  var warn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  let warn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   try {
     window[type].setItem('PMATest', 'test');
     // Check whether key-value pair was set successfully
@@ -267,7 +267,7 @@ var validators = {
    *
    * @return {boolean}
    */
-  validatePositiveNumber: function validatePositiveNumber(isKeyUp) {
+  validatePositiveNumber: function (isKeyUp) {
     if (isKeyUp && this.value === '') {
       return true;
     }
@@ -281,7 +281,7 @@ var validators = {
    *
    * @return {boolean}
    */
-  validateNonNegativeNumber: function validateNonNegativeNumber(isKeyUp) {
+  validateNonNegativeNumber: function (isKeyUp) {
     if (isKeyUp && this.value === '') {
       return true;
     }
@@ -293,7 +293,7 @@ var validators = {
    *
    * @return {true|string}
    */
-  validatePortNumber: function validatePortNumber() {
+  validatePortNumber: function () {
     if (this.value === '') {
       return true;
     }
@@ -308,7 +308,7 @@ var validators = {
    *
    * @return {true|string}
    */
-  validateByRegex: function validateByRegex(isKeyUp, regexp) {
+  validateByRegex: function (isKeyUp, regexp) {
     if (isKeyUp && this.value === '') {
       return true;
     }
@@ -325,7 +325,7 @@ var validators = {
    *
    * @return {true|string}
    */
-  validateUpperBound: function validateUpperBound(isKeyUp, maxValue) {
+  validateUpperBound: function (isKeyUp, maxValue) {
     var val = parseInt(this.value, 10);
     if (isNaN(val)) {
       return true;
@@ -397,7 +397,7 @@ function getFieldValidators(fieldId, onKeyUpOnly) {
  * @param {object} errorList list of errors in the form {field id: error array}
  */
 function displayErrors(errorList) {
-  var tempIsEmpty = function tempIsEmpty(item) {
+  var tempIsEmpty = function (item) {
     return item !== '';
   };
   for (var fieldId in errorList) {
@@ -750,7 +750,7 @@ function savePrefsToLocalStorage(form) {
       'server': CommonParams.get('server'),
       'submit_get_json': true
     },
-    success: function success(data) {
+    success: function (data) {
       if (typeof data !== 'undefined' && data.success === true) {
         window.localStorage.config = data.prefs;
         window.localStorage.configMtime = data.mtime;
@@ -766,7 +766,7 @@ function savePrefsToLocalStorage(form) {
         Functions.ajaxShowMessage(data.error);
       }
     },
-    complete: function complete() {
+    complete: function () {
       submit.prop('disabled', false);
     }
   });
@@ -822,7 +822,7 @@ var PASSIVE_EVENT_LISTENERS = function () {
   var passive = false;
   try {
     var options = Object.defineProperty({}, 'passive', {
-      get: function get() {
+      get: function () {
         return passive = true;
       }
     });

@@ -1,4 +1,3 @@
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 /**
  * This file is internal to phpMyAdmin.
  * @license see the main phpMyAdmin license.
@@ -42,27 +41,27 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 (function ($) {
   jQuery.fn.sortableTable = function (method) {
     var methods = {
-      init: function init(options) {
+      init: function (options) {
         var tb = new SortableTableInstance(this, options);
         tb.init();
         $(this).data('sortableTable', tb);
       },
-      refresh: function refresh() {
+      refresh: function () {
         $(this).data('sortableTable').refresh();
       },
-      destroy: function destroy() {
+      destroy: function () {
         $(this).data('sortableTable').destroy();
       }
     };
     if (methods[method]) {
       return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-    } else if (_typeof(method) === 'object' || !method) {
+    } else if (typeof method === 'object' || !method) {
       return methods.init.apply(this, arguments);
     } else {
       $.error('Method ' + method + ' does not exist on jQuery.sortableTable');
     }
     function SortableTableInstance(table) {
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var down = false;
       var $draggedEl;
       var oldCell;
@@ -70,10 +69,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       var id;
 
       /* Mouse handlers on the child elements */
-      var onMouseUp = function onMouseUp(e) {
+      var onMouseUp = function (e) {
         dropAt(e.pageX, e.pageY);
       };
-      var onMouseDown = function onMouseDown(e) {
+      var onMouseDown = function (e) {
         $draggedEl = $(this).children();
         if ($draggedEl.length === 0) {
           return;
@@ -91,7 +90,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         }
         return false;
       };
-      var globalMouseMove = function globalMouseMove(e) {
+      var globalMouseMove = function (e) {
         if (down) {
           move(e.pageX, e.pageY);
           if (inside($(oldCell), e.pageX, e.pageY)) {
@@ -123,7 +122,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         }
         return false;
       };
-      var globalMouseOut = function globalMouseOut() {
+      var globalMouseOut = function () {
         if (down) {
           down = false;
           if (previewMove) {
@@ -202,8 +201,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           // and vice versa. So the parameters are switched.
 
           // Calculate row and column index
-          var colIdx = $(dropTo).prevAll().length;
-          var rowIdx = $(dropTo).parent().prevAll().length;
+          const colIdx = $(dropTo).prevAll().length;
+          const rowIdx = $(dropTo).parent().prevAll().length;
           options.events.drop(drag, dropTo, {
             col: colIdx,
             row: rowIdx
@@ -244,7 +243,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         previewMove = null;
       }
       function moveTo(elem) {
-        var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        let opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         if (!opts.pos) {
           opts.pos = {
             left: 0,
@@ -260,7 +259,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           left: opts.pos.left
         }, {
           duration: opts.duration,
-          complete: function complete() {
+          complete: function () {
             if (opts.pos.left === 0 && opts.pos.top === 0) {
               $(elem).css('position', '').css('left', '').css('top', '');
             }

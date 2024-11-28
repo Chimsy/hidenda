@@ -96,10 +96,7 @@ class TransactionStatement extends Statement
                 $ret .= ';' . $statement->build();
             }
 
-            $ret .= ';';
-            if ($this->end !== null) {
-                $ret .= $this->end->build();
-            }
+            $ret .= ';' . $this->end->build();
         }
 
         return $ret;

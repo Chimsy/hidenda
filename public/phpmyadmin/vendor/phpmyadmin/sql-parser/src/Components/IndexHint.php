@@ -22,21 +22,21 @@ class IndexHint extends Component
     /**
      * The type of hint (USE/FORCE/IGNORE)
      *
-     * @var string|null
+     * @var string
      */
     public $type;
 
     /**
      * What the hint is for (INDEX/KEY)
      *
-     * @var string|null
+     * @var string
      */
     public $indexOrKey;
 
     /**
      * The clause for which this hint is (JOIN/ORDER BY/GROUP BY)
      *
-     * @var string|null
+     * @var string
      */
     public $for;
 

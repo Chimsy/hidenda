@@ -6,9 +6,7 @@ namespace PhpMyAdmin\SqlParser;
 
 use ArrayAccess;
 
-use function array_splice;
 use function count;
-use function in_array;
 use function is_array;
 use function is_string;
 
@@ -121,7 +119,7 @@ class TokensList implements ArrayAccess
      */
     public function getPrevious(): ?Token
     {
-        for (; $this->idx >= 0; --$this->idx) {
+        for (; $this->idx > 0; --$this->idx) {
             if (
                 ($this->tokens[$this->idx]->type !== Token::TYPE_WHITESPACE)
                 && ($this->tokens[$this->idx]->type !== Token::TYPE_COMMENT)
@@ -134,42 +132,16 @@ class TokensList implements ArrayAccess
     }
 
     /**
-     * Gets the previous token.
-     *
-     * @param int|int[] $type the type
-     *
-     * @return Token|null
-     */
-    public function getPreviousOfType($type)
-    {
-        if (! is_array($type)) {
-            $type = [$type];
-        }
-
-        for (; $this->idx >= 0; --$this->idx) {
-            if (in_array($this->tokens[$this->idx]->type, $type, true)) {
-                return $this->tokens[$this->idx--];
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Gets the next token.
      *
-     * @param int|int[] $type the type
+     * @param int $type the type
      *
      * @return Token|null
      */
     public function getNextOfType($type)
     {
-        if (! is_array($type)) {
-            $type = [$type];
-        }
-
         for (; $this->idx < $this->count; ++$this->idx) {
-            if (in_array($this->tokens[$this->idx]->type, $type, true)) {
+            if ($this->tokens[$this->idx]->type === $type) {
                 return $this->tokens[$this->idx++];
             }
         }
@@ -214,12 +186,9 @@ class TokensList implements ArrayAccess
     }
 
     /**
-     * Sets a Token inside the list of tokens.
-     * When defined, offset must be positive otherwise the offset is ignored.
-     * If the offset is not defined (like in array_push) or if it is greater than the number of Tokens already stored,
-     * the Token is appended to the list of tokens.
+     * Sets an value inside the container.
      *
-     * @param int|null $offset the offset to be set. Must be positive otherwise, nothing will be stored.
+     * @param int|null $offset the offset to be set
      * @param Token    $value  the token to be saved
      *
      * @return void
@@ -227,16 +196,15 @@ class TokensList implements ArrayAccess
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
-        if ($offset === null || $offset >= $this->count) {
+        if ($offset === null) {
             $this->tokens[$this->count++] = $value;
-        } elseif ($offset >= 0) {
+        } else {
             $this->tokens[$offset] = $value;
         }
     }
 
     /**
-     * Gets a Token from the list of tokens.
-     * If the offset is negative or above the number of tokens set in the list, will return null.
+     * Gets a value from the container.
      *
      * @param int $offset the offset to be returned
      *
@@ -245,12 +213,11 @@ class TokensList implements ArrayAccess
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        return $this->offsetExists($offset) ? $this->tokens[$offset] : null;
+        return $offset < $this->count ? $this->tokens[$offset] : null;
     }
 
     /**
      * Checks if an offset was previously set.
-     * If the offset is negative or above the number of tokens set in the list, will return false.
      *
      * @param int $offset the offset to be checked
      *
@@ -259,11 +226,11 @@ class TokensList implements ArrayAccess
     #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
-        return $offset >= 0 && $offset < $this->count;
+        return $offset < $this->count;
     }
 
     /**
-     * Unsets the value of an offset, if the offset exists.
+     * Unsets the value of an offset.
      *
      * @param int $offset the offset to be unset
      *
@@ -272,11 +239,12 @@ class TokensList implements ArrayAccess
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
-        if (! $this->offsetExists($offset)) {
-            return;
+        unset($this->tokens[$offset]);
+        --$this->count;
+        for ($i = $offset; $i < $this->count; ++$i) {
+            $this->tokens[$i] = $this->tokens[$i + 1];
         }
 
-        array_splice($this->tokens, $offset, 1);
-        --$this->count;
+        unset($this->tokens[$this->count]);
     }
 }

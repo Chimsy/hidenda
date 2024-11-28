@@ -11,104 +11,101 @@
 
 namespace Twig\Node;
 
-use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Error\SyntaxError;
-use Twig\Markup;
-use Twig\Node\Expression\ArrayExpression;
-use Twig\Node\Expression\Variable\LocalVariable;
 
 /**
  * Represents a macro node.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-#[YieldReady]
 class MacroNode extends Node
 {
     public const VARARGS_NAME = 'varargs';
 
-    /**
-     * @param BodyNode        $body
-     * @param ArrayExpression $arguments
-     */
-    public function __construct(string $name, Node $body, Node $arguments, int $lineno)
+    public function __construct(string $name, Node $body, Node $arguments, int $lineno, string $tag = null)
     {
-        if (!$body instanceof BodyNode) {
-            trigger_deprecation('twig/twig', '3.12', \sprintf('Not passing a "%s" instance as the "body" argument of the "%s" constructor is deprecated ("%s" given).', BodyNode::class, static::class, $body::class));
-        }
-
-        if (!$arguments instanceof ArrayExpression) {
-            trigger_deprecation('twig/twig', '3.15', \sprintf('Not passing a "%s" instance as the "arguments" argument of the "%s" constructor is deprecated ("%s" given).', ArrayExpression::class, static::class, $arguments::class));
-
-            $args = new ArrayExpression([], $arguments->getTemplateLine());
-            foreach ($arguments as $name => $default) {
-                $args->addElement($default, new LocalVariable($name, $default->getTemplateLine()));
-            }
-            $arguments = $args;
-        }
-
-        foreach ($arguments->getKeyValuePairs() as $pair) {
-            if ('_'.self::VARARGS_NAME.'_' === $pair['key']->getAttribute('name')) {
-                throw new SyntaxError(\sprintf('The argument "%s" in macro "%s" cannot be defined because the variable "%s" is reserved for arbitrary arguments.', self::VARARGS_NAME, $name, self::VARARGS_NAME), $pair['value']->getTemplateLine(), $pair['value']->getSourceContext());
+        foreach ($arguments as $argumentName => $argument) {
+            if (self::VARARGS_NAME === $argumentName) {
+                throw new SyntaxError(sprintf('The argument "%s" in macro "%s" cannot be defined because the variable "%s" is reserved for arbitrary arguments.', self::VARARGS_NAME, $name, self::VARARGS_NAME), $argument->getTemplateLine(), $argument->getSourceContext());
             }
         }
 
-        parent::__construct(['body' => $body, 'arguments' => $arguments], ['name' => $name], $lineno);
+        parent::__construct(['body' => $body, 'arguments' => $arguments], ['name' => $name], $lineno, $tag);
     }
 
     public function compile(Compiler $compiler): void
     {
         $compiler
             ->addDebugInfo($this)
-            ->write(\sprintf('public function macro_%s(', $this->getAttribute('name')))
+            ->write(sprintf('public function macro_%s(', $this->getAttribute('name')))
         ;
 
-        foreach ($this->getNode('arguments')->getKeyValuePairs() as $pair) {
-            $name = $pair['key'];
-            $default = $pair['value'];
+        $count = \count($this->getNode('arguments'));
+        $pos = 0;
+        foreach ($this->getNode('arguments') as $name => $default) {
             $compiler
-                ->subcompile($name)
-                ->raw(' = ')
+                ->raw('$__'.$name.'__ = ')
                 ->subcompile($default)
-                ->raw(', ')
             ;
+
+            if (++$pos < $count) {
+                $compiler->raw(', ');
+            }
+        }
+
+        if ($count) {
+            $compiler->raw(', ');
         }
 
         $compiler
-            ->raw('...$varargs')
-            ->raw("): string|Markup\n")
+            ->raw('...$__varargs__')
+            ->raw(")\n")
             ->write("{\n")
             ->indent()
             ->write("\$macros = \$this->macros;\n")
-            ->write("\$context = [\n")
+            ->write("\$context = \$this->env->mergeGlobals([\n")
             ->indent()
         ;
 
-        foreach ($this->getNode('arguments')->getKeyValuePairs() as $pair) {
-            $name = $pair['key'];
+        foreach ($this->getNode('arguments') as $name => $default) {
             $compiler
                 ->write('')
-                ->string(trim($name->getAttribute('name'), '_'))
-                ->raw(' => ')
-                ->subcompile($name)
+                ->string($name)
+                ->raw(' => $__'.$name.'__')
                 ->raw(",\n")
             ;
         }
-
-        $node = new CaptureNode($this->getNode('body'), $this->getNode('body')->lineno);
 
         $compiler
             ->write('')
             ->string(self::VARARGS_NAME)
             ->raw(' => ')
-            ->raw("\$varargs,\n")
+        ;
+
+        $compiler
+            ->raw("\$__varargs__,\n")
             ->outdent()
-            ->write("] + \$this->env->getGlobals();\n\n")
+            ->write("]);\n\n")
             ->write("\$blocks = [];\n\n")
-            ->write('return ')
-            ->subcompile($node)
+        ;
+        if ($compiler->getEnvironment()->isDebug()) {
+            $compiler->write("ob_start();\n");
+        } else {
+            $compiler->write("ob_start(function () { return ''; });\n");
+        }
+        $compiler
+            ->write("try {\n")
+            ->indent()
+            ->subcompile($this->getNode('body'))
             ->raw("\n")
+            ->write("return ('' === \$tmp = ob_get_contents()) ? '' : new Markup(\$tmp, \$this->env->getCharset());\n")
+            ->outdent()
+            ->write("} finally {\n")
+            ->indent()
+            ->write("ob_end_clean();\n")
+            ->outdent()
+            ->write("}\n")
             ->outdent()
             ->write("}\n\n")
         ;

@@ -1,4 +1,3 @@
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 /* global firstDayOfCalendar */ // templates/javascript/variables.twig
 
 /**
@@ -17,7 +16,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
  * @param enableGridEdit Optional, if false, grid editing feature will be disabled
  */
 // eslint-disable-next-line no-unused-vars
-var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, enableGridEdit) {
+var makeGrid = function (t, enableResize, enableReorder, enableVisib, enableGridEdit) {
   var isResizeEnabled = enableResize === undefined ? true : enableResize;
   var isReorderEnabled = enableReorder === undefined ? true : enableReorder;
   var isVisibEnabled = enableVisib === undefined ? true : enableVisib;
@@ -102,7 +101,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param e event
      * @param obj dragged div object
      */
-    dragStartRsz: function dragStartRsz(e, obj) {
+    dragStartRsz: function (e, obj) {
       var n = $(g.cRsz).find('div').index(obj); // get the index of separator (i.e., column index)
       $(obj).addClass('colborder_active');
       g.colRsz = {
@@ -124,7 +123,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param e event
      * @param obj table header object
      */
-    dragStartReorder: function dragStartReorder(e, obj) {
+    dragStartReorder: function (e, obj) {
       // prepare the cCpy (column copy) and cPointer (column pointer) from the dragged column
       $(g.cCpy).text($(obj).text());
       var objPos = $(obj).position();
@@ -161,7 +160,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      *
      * @param e event
      */
-    dragMove: function dragMove(e) {
+    dragMove: function (e) {
       var dx;
       if (g.colRsz) {
         dx = e.pageX - g.colRsz.x0;
@@ -198,7 +197,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      *
      * @param e event
      */
-    dragEnd: function dragEnd(e) {
+    dragEnd: function (e) {
       if (g.colRsz) {
         var dx = e.pageX - g.colRsz.x0;
         var nw = g.colRsz.objWidth + dx;
@@ -245,7 +244,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param n zero-based column index
      * @param nw new width of the column in pixel
      */
-    resize: function resize(n, nw) {
+    resize: function (n, nw) {
       $(g.t).find('tr').each(function () {
         $(this).find('th.draggable:visible').eq(n).find('span').add($(this).find('td:visible').eq(g.actionSpan + n).find('span')).css('width', nw);
       });
@@ -253,7 +252,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
     /**
      * Reposition column resize bars.
      */
-    reposRsz: function reposRsz() {
+    reposRsz: function () {
       $(g.cRsz).find('div').hide();
       var $firstRowCols = $(g.t).find('tr').first().find('th.draggable:visible');
       var $resizeHandles = $(g.cRsz).find('div').removeClass('condition');
@@ -285,7 +284,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param oldn old zero-based column index
      * @param newn new zero-based column index
      */
-    shiftCol: function shiftCol(oldn, newn) {
+    shiftCol: function (oldn, newn) {
       $(g.t).find('tr').each(function () {
         if (newn < oldn) {
           $(this).find('th.draggable').eq(newn).add($(this).find('td').eq(g.actionSpan + newn)).before($(this).find('th.draggable').eq(oldn).add($(this).find('td').eq(g.actionSpan + oldn)));
@@ -319,7 +318,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param e event
      * @return {object|undefined} the hovered column's th object or undefined if no hovered column found.
      */
-    getHoveredCol: function getHoveredCol(e) {
+    getHoveredCol: function (e) {
       var hoveredCol;
       var $headers = $(g.t).find('th.draggable:visible');
       $headers.each(function () {
@@ -337,13 +336,13 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param obj table header <th> object
      * @return {number} zero-based index of the specified table header in the set of table headers (visible or not)
      */
-    getHeaderIdx: function getHeaderIdx(obj) {
+    getHeaderIdx: function (obj) {
       return $(obj).parents('tr').find('th.draggable').index(obj);
     },
     /**
      * Reposition the columns back to normal order.
      */
-    restoreColOrder: function restoreColOrder() {
+    restoreColOrder: function () {
       // use insertion sort, since we already have shiftCol function
       for (var i = 1; i < g.colOrder.length; i++) {
         var x = g.colOrder[i];
@@ -364,7 +363,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
     /**
      * Send column preferences (column order and visibility) to the server.
      */
-    sendColPrefs: function sendColPrefs() {
+    sendColPrefs: function () {
       if ($(g.t).is('.ajax')) {
         // only send preferences if ajax class
         if (typeof g.db !== 'string' && typeof g.table !== 'string') {
@@ -404,7 +403,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * Refresh restore button state.
      * Make restore button disabled if the table is similar with initial state.
      */
-    refreshRestoreButton: function refreshRestoreButton() {
+    refreshRestoreButton: function () {
       // check if table state is as initial state
       var isInitial = true;
       for (var i = 0; i < g.colOrder.length; i++) {
@@ -428,7 +427,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @return {string}
      *
      */
-    updateHint: function updateHint() {
+    updateHint: function () {
       var text = '';
       if (!g.colRsz && !g.colReorder) {
         // if not resizing or dragging
@@ -467,7 +466,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      *
      * @return {boolean} True if the column is toggled successfully.
      */
-    toggleCol: function toggleCol(n) {
+    toggleCol: function (n) {
       if (g.colVisib[n]) {
         // can hide if more than one column is visible
         if (g.visibleHeadersCount > 1) {
@@ -497,7 +496,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * This function is separated from toggleCol because, sometimes, we want to toggle
      * some columns together at one time and do just one adjustment after it, e.g. in showAllColumns().
      */
-    afterToggleCol: function afterToggleCol() {
+    afterToggleCol: function () {
       // some adjustments after hiding column
       g.reposRsz();
       g.reposDrop();
@@ -524,7 +523,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      *
      * @param obj The drop down arrow of column visibility list
      */
-    showColList: function showColList(obj) {
+    showColList: function (obj) {
       // only show when not resizing or reordering
       if (!g.colRsz && !g.colReorder) {
         var pos = $(obj).position();
@@ -537,14 +536,14 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
     /**
      * Hide columns' visibility list.
      */
-    hideColList: function hideColList() {
+    hideColList: function () {
       $(g.cList).hide();
       $(g.cDrop).find('.coldrop-hover').removeClass('coldrop-hover');
     },
     /**
      * Reposition the column visibility drop-down arrow.
      */
-    reposDrop: function reposDrop() {
+    reposDrop: function () {
       var $th = $(t).find('th:not(.draggable)');
       for (var i = 0; i < $th.length; i++) {
         var $cd = $(g.cDrop).find('div').eq(i); // column drop-down arrow
@@ -558,7 +557,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
     /**
      * Show all hidden columns.
      */
-    showAllColumns: function showAllColumns() {
+    showAllColumns: function () {
       for (var i = 0; i < g.colVisib.length; i++) {
         if (!g.colVisib[i]) {
           g.toggleCol(i);
@@ -571,7 +570,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      *
      * @param cell <td> element to be edited
      */
-    showEditCell: function showEditCell(cell) {
+    showEditCell: function (cell) {
       // destroy the date picker instance left if any, see: #17703
       var $datePickerInstance = $(g.cEdit).find('.hasDatepicker');
       if ($datePickerInstance.length > 0) {
@@ -627,7 +626,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param options Optional, this object contains a boolean named move (true, if called from move* functions)
      *                and a <td> to which the grid_edit should move
      */
-    hideEditCell: function hideEditCell(force, data, field, options) {
+    hideEditCell: function (force, data, field, options) {
       if (g.isCellEditActive && !force) {
         // cell is being edited, save or post the edited data
         if (options !== undefined) {
@@ -730,7 +729,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
     /**
      * Show drop-down edit area when edit cell is focused.
      */
-    showEditArea: function showEditArea() {
+    showEditArea: function () {
       if (!g.isCellEditActive) {
         // make sure the edit area has not been shown
         g.isCellEditActive = true;
@@ -914,7 +913,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
           };
           g.lastXHR = $.post('index.php?route=/sql/get-enum-values', postParams, function (data) {
             g.lastXHR = null;
-            if (_typeof(data) === 'object' && data.success === false) {
+            if (typeof data === 'object' && data.success === false) {
               Functions.ajaxShowMessage(data.error, undefined, 'error');
               return;
             }
@@ -955,7 +954,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
           }
           g.lastXHR = $.post('index.php?route=/sql/get-set-values', postParams, function (data) {
             g.lastXHR = null;
-            if (_typeof(data) === 'object' && data.success === false) {
+            if (typeof data === 'object' && data.success === false) {
               Functions.ajaxShowMessage(data.error, undefined, 'error');
               return;
             }
@@ -1109,7 +1108,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param options Optional, this object contains a boolean named move (true, if called from move* functions)
      *                and a <td> to which the grid_edit should move
      */
-    postEditedCell: function postEditedCell(options) {
+    postEditedCell: function (options) {
       if (g.isSaving) {
         return;
       }
@@ -1222,7 +1221,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
             if ($thisField.attr('data-type') !== 'json') {
               fields.push($thisField.data('value'));
             } else {
-              var JSONString = Functions.stringifyJSON($thisField.data('value'));
+              const JSONString = Functions.stringifyJSON($thisField.data('value'));
               fields.push(JSONString);
             }
             var cellIndex = $thisField.index('.to_be_saved');
@@ -1300,7 +1299,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
         type: 'POST',
         url: 'index.php?route=/table/replace',
         data: postParams,
-        success: function success(data) {
+        success: function (data) {
           g.isSaving = false;
           if (!g.saveCellsAtOnce) {
             $(g.cEdit).find('*').prop('disabled', false);
@@ -1389,7 +1388,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      *
      * @return {bool}
      */
-    saveEditedCell: function saveEditedCell() {
+    saveEditedCell: function () {
       /**
        * @var $thisField    Object referring to the td that is being edited
        */
@@ -1445,11 +1444,11 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
         } else {
           thisFieldParams[fieldName] = $(g.cEdit).find('.edit_box').val();
         }
-        var isValueUpdated;
+        let isValueUpdated;
         if ($thisField.attr('data-type') !== 'json') {
           isValueUpdated = thisFieldParams[fieldName] !== Functions.getCellValue(g.currentEditCell);
         } else {
-          var JSONString = Functions.stringifyJSON(thisFieldParams[fieldName]);
+          const JSONString = Functions.stringifyJSON(thisFieldParams[fieldName]);
           isValueUpdated = JSONString !== JSON.stringify(JSON.parse(Functions.getCellValue(g.currentEditCell)));
         }
         if (g.wasEditedCellNull || isValueUpdated) {
@@ -1471,7 +1470,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param options Optional, this object contains a boolean named move (true, if called from move* functions)
      *                and a <td> to which the grid_edit should move
      */
-    saveOrPostEditedCell: function saveOrPostEditedCell(options) {
+    saveOrPostEditedCell: function (options) {
       var saved = g.saveEditedCell();
       // Check if $cfg['SaveCellsAtOnce'] is false
       if (!g.saveCellsAtOnce) {
@@ -1521,7 +1520,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
     /**
      * Initialize column resize feature.
      */
-    initColResize: function initColResize() {
+    initColResize: function () {
       // create column resizer div
       g.cRsz = document.createElement('div');
       g.cRsz.className = 'cRsz';
@@ -1545,7 +1544,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
     /**
      * Initialize column reordering feature.
      */
-    initColReorder: function initColReorder() {
+    initColReorder: function () {
       g.cCpy = document.createElement('div'); // column copy, to store copy of dragged column header
       g.cPointer = document.createElement('div'); // column pointer, used when reordering column
 
@@ -1627,7 +1626,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
     /**
      * Initialize column visibility feature.
      */
-    initColVisib: function initColVisib() {
+    initColVisib: function () {
       g.cDrop = document.createElement('div'); // column drop-down arrows
       g.cList = document.createElement('div'); // column visibility list
 
@@ -1679,7 +1678,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
         // add column visibility control
         g.cList.innerHTML = '<div class="lDiv"></div>';
         var $listDiv = $(g.cList).find('div');
-        var tempClick = function tempClick() {
+        var tempClick = function () {
           if (g.toggleCol($(this).index())) {
             g.afterToggleCol();
           }
@@ -1728,7 +1727,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param e
      *
      */
-    moveUp: function moveUp(e) {
+    moveUp: function (e) {
       e.preventDefault();
       var $thisField = $(g.currentEditCell);
       var fieldName = Sql.getFieldName($(g.t), $thisField);
@@ -1767,7 +1766,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param e
      *
      */
-    moveDown: function moveDown(e) {
+    moveDown: function (e) {
       e.preventDefault();
       var $thisField = $(g.currentEditCell);
       var fieldName = Sql.getFieldName($(g.t), $thisField);
@@ -1813,7 +1812,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param e
      *
      */
-    moveLeft: function moveLeft(e) {
+    moveLeft: function (e) {
       e.preventDefault();
       var $thisField = $(g.currentEditCell);
       var fieldName = Sql.getFieldName($(g.t), $thisField);
@@ -1854,7 +1853,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
      * @param e
      *
      */
-    moveRight: function moveRight(e) {
+    moveRight: function (e) {
       e.preventDefault();
       var $thisField = $(g.currentEditCell);
       var fieldName = Sql.getFieldName($(g.t), $thisField);
@@ -1899,7 +1898,7 @@ var makeGrid = function makeGrid(t, enableResize, enableReorder, enableVisib, en
     /**
      * Initialize grid editing feature.
      */
-    initGridEdit: function initGridEdit() {
+    initGridEdit: function () {
       function startGridEditing(e, cell) {
         if (g.isCellEditActive) {
           g.saveOrPostEditedCell();

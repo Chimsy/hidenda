@@ -24,7 +24,7 @@ var ErrorReport = {
    * @param {any} exception
    * @return {void}
    */
-  errorDataHandler: function errorDataHandler(data, exception) {
+  errorDataHandler: function (data, exception) {
     if (data.success !== true) {
       Functions.ajaxShowMessage(data.error, false);
       return;
@@ -47,7 +47,7 @@ var ErrorReport = {
       });
     }
   },
-  errorHandler: function errorHandler(exception) {
+  errorHandler: function (exception) {
     // issue: 14359
     if (JSON.stringify(ErrorReport.lastException) === JSON.stringify(exception)) {
       return;
@@ -77,10 +77,10 @@ var ErrorReport = {
    *
    * @return {void}
    */
-  showReportDialog: function showReportDialog(exception) {
-    var reportData = ErrorReport.getReportData(exception);
-    var sendErrorReport = function sendErrorReport() {
-      var postData = $.extend(reportData, {
+  showReportDialog: function (exception) {
+    const reportData = ErrorReport.getReportData(exception);
+    const sendErrorReport = function () {
+      const postData = $.extend(reportData, {
         'send_error_report': true,
         'description': $('#errorReportDescription').val(),
         'always_send': $('#errorReportAlwaysSendCheckbox')[0].checked
@@ -100,7 +100,7 @@ var ErrorReport = {
         $('#errorReportModal').remove();
       }
       $('body').append($(data.report_modal));
-      var $errorReportModal = $('#errorReportModal');
+      const $errorReportModal = $('#errorReportModal');
       $errorReportModal.on('show.bs.modal', function () {
         // Prevents multiple onClick events
         $('#errorReportModalConfirm').off('click', sendErrorReport);
@@ -115,7 +115,7 @@ var ErrorReport = {
    *
    * @return {void}
    */
-  showErrorNotification: function showErrorNotification() {
+  showErrorNotification: function () {
     var key = Math.random().toString(36).substring(2, 12);
     while (key in ErrorReport.keyDict) {
       key = Math.random().toString(36).substring(2, 12);
@@ -146,7 +146,7 @@ var ErrorReport = {
    * @param {Event} e
    * @return {void}
    */
-  removeErrorNotification: function removeErrorNotification(e) {
+  removeErrorNotification: function (e) {
     if (e) {
       // don't remove the hash fragment by navigating to #
       e.preventDefault();
@@ -161,7 +161,7 @@ var ErrorReport = {
    * @param exception
    * @return {string}
    */
-  extractExceptionName: function extractExceptionName(exception) {
+  extractExceptionName: function (exception) {
     if (exception.message === null || typeof exception.message === 'undefined') {
       return '';
     }
@@ -177,7 +177,7 @@ var ErrorReport = {
    *
    * @return {void}
    */
-  createReportDialog: function createReportDialog() {
+  createReportDialog: function () {
     ErrorReport.removeErrorNotification();
     ErrorReport.showReportDialog(ErrorReport.lastException);
   },
@@ -188,7 +188,7 @@ var ErrorReport = {
    *
    * @return {object}
    */
-  getReportData: function getReportData(exception) {
+  getReportData: function (exception) {
     if (exception && exception.stack && exception.stack.length) {
       for (var i = 0; i < exception.stack.length; i++) {
         var stack = exception.stack[i];
@@ -222,9 +222,9 @@ var ErrorReport = {
    *
    * @return {Function}
    */
-  wrapFunction: function wrapFunction(func) {
+  wrapFunction: function (func) {
     if (!func.wrapped) {
-      var newFunc = function newFunc() {
+      var newFunc = function () {
         try {
           return func.apply(this, arguments);
         } catch (x) {
@@ -245,7 +245,7 @@ var ErrorReport = {
    *
    * @return {void}
    */
-  wrapAjaxOnloadCallback: function wrapAjaxOnloadCallback() {
+  wrapAjaxOnloadCallback: function () {
     var oldOnload = AJAX.registerOnload;
     AJAX.registerOnload = function (file, func) {
       var wrappedFunction = ErrorReport.wrapFunction(func);
@@ -257,7 +257,7 @@ var ErrorReport = {
    *
    * @return {void}
    */
-  wrapJqueryOnCallback: function wrapJqueryOnCallback() {
+  wrapJqueryOnCallback: function () {
     var oldOn = $.fn.on;
     $.fn.on = function () {
       for (var i = 1; i <= 3; i++) {
@@ -274,7 +274,7 @@ var ErrorReport = {
    *
    * @return {void}
    */
-  setUpErrorReporting: function setUpErrorReporting() {
+  setUpErrorReporting: function () {
     ErrorReport.wrapAjaxOnloadCallback();
     ErrorReport.wrapJqueryOnCallback();
   }

@@ -718,10 +718,6 @@ class CreateStatement extends Statement
 
             for (; $list->idx < $list->count; ++$list->idx) {
                 $token = $list->tokens[$list->idx];
-                if ($token->type === Token::TYPE_DELIMITER) {
-                    break;
-                }
-
                 $this->body[] = $token;
             }
         } elseif ($this->options->has('VIEW')) {
@@ -785,10 +781,6 @@ class CreateStatement extends Statement
 
             for (; $list->idx < $list->count; ++$list->idx) {
                 $token = $list->tokens[$list->idx];
-                if ($token->type === Token::TYPE_DELIMITER) {
-                    break;
-                }
-
                 $this->body[] = $token;
             }
         } else {

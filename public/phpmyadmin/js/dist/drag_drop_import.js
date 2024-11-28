@@ -32,7 +32,7 @@ var DragDropImport = {
    *
    * @return {string}, extension for valid extension, '' otherwise
    */
-  getExtension: function getExtension(file) {
+  getExtension: function (file) {
     var arr = file.split('.');
     var ext = arr[arr.length - 1];
 
@@ -55,7 +55,7 @@ var DragDropImport = {
    *
    * @return {void}
    */
-  setProgress: function setProgress(hash, percent) {
+  setProgress: function (hash, percent) {
     $('.pma_sql_import_status div li[data-hash="' + hash + '"]').children('progress').val(percent);
   },
   /**
@@ -66,9 +66,9 @@ var DragDropImport = {
    *
    * @return {void}
    */
-  sendFileToServer: function sendFileToServer(formData, hash) {
+  sendFileToServer: function (formData, hash) {
     var jqXHR = $.ajax({
-      xhr: function xhr() {
+      xhr: function () {
         var xhrobj = $.ajaxSettings.xhr();
         if (xhrobj.upload) {
           xhrobj.upload.addEventListener('progress', function (event) {
@@ -90,7 +90,7 @@ var DragDropImport = {
       processData: false,
       cache: false,
       data: formData,
-      success: function success(data) {
+      success: function (data) {
         DragDropImport.importFinished(hash, false, data.success);
         if (!data.success) {
           DragDropImport.importStatus[DragDropImport.importStatus.length] = {
@@ -132,7 +132,7 @@ var DragDropImport = {
    *
    * @return {void}
    */
-  dragEnter: function dragEnter(event) {
+  dragEnter: function (event) {
     // We don't want to prevent users from using
     // browser's default drag-drop feature on some page(s)
     if ($('.noDragDrop').length !== 0) {
@@ -157,7 +157,7 @@ var DragDropImport = {
    *
    * @return {boolean}
    */
-  hasFiles: function hasFiles(event) {
+  hasFiles: function (event) {
     return !(typeof event.originalEvent.dataTransfer.types === 'undefined' || $.inArray('Files', event.originalEvent.dataTransfer.types) < 0 || $.inArray('application/x-moz-nativeimage', event.originalEvent.dataTransfer.types) >= 0);
   },
   /**
@@ -167,7 +167,7 @@ var DragDropImport = {
    *
    * @return {void}
    */
-  dragOver: function dragOver(event) {
+  dragOver: function (event) {
     // We don't want to prevent users from using
     // browser's default drag-drop feature on some page(s)
     if ($('.noDragDrop').length !== 0) {
@@ -187,7 +187,7 @@ var DragDropImport = {
    *
    * @return {void}
    */
-  dragLeave: function dragLeave(event) {
+  dragLeave: function (event) {
     // We don't want to prevent users from using
     // browser's default drag-drop feature on some page(s)
     if ($('.noDragDrop').length !== 0) {
@@ -209,7 +209,7 @@ var DragDropImport = {
    *
    * @return {void}
    */
-  importFinished: function importFinished(hash, aborted, status) {
+  importFinished: function (hash, aborted, status) {
     $('.pma_sql_import_status div li[data-hash="' + hash + '"]').children('progress').hide();
     var icon = 'icon ic_s_success';
     // -- provide link to view upload status
@@ -242,7 +242,7 @@ var DragDropImport = {
    *
    * @return {void}
    */
-  drop: function drop(event) {
+  drop: function (event) {
     // We don't want to prevent users from using
     // browser's default drag-drop feature on some page(s)
     if ($('.noDragDrop').length !== 0) {

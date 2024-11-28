@@ -18,7 +18,6 @@ use PhpMyAdmin\SqlParser\Statements\DeleteStatement;
 use PhpMyAdmin\SqlParser\Statements\DropStatement;
 use PhpMyAdmin\SqlParser\Statements\ExplainStatement;
 use PhpMyAdmin\SqlParser\Statements\InsertStatement;
-use PhpMyAdmin\SqlParser\Statements\KillStatement;
 use PhpMyAdmin\SqlParser\Statements\LoadStatement;
 use PhpMyAdmin\SqlParser\Statements\OptimizeStatement;
 use PhpMyAdmin\SqlParser\Statements\RenameStatement;
@@ -37,7 +36,6 @@ use function array_keys;
 use function count;
 use function in_array;
 use function is_string;
-use function strtoupper;
 use function trim;
 
 /**
@@ -67,7 +65,7 @@ use function trim;
  *   limit?: bool,
  *   offset?: bool,
  *   order?: bool,
- *   querytype: ('ALTER'|'ANALYZE'|'CALL'|'CHECK'|'CHECKSUM'|'CREATE'|'DELETE'|'DROP'|'EXPLAIN'|'INSERT'|'KILL'|'LOAD'|'OPTIMIZE'|'REPAIR'|'REPLACE'|'SELECT'|'SET'|'SHOW'|'UPDATE'|false),
+ *   querytype: ('ALTER'|'ANALYZE'|'CALL'|'CHECK'|'CHECKSUM'|'CREATE'|'DELETE'|'DROP'|'EXPLAIN'|'INSERT'|'LOAD'|'OPTIMIZE'|'REPAIR'|'REPLACE'|'SELECT'|'SET'|'SHOW'|'UPDATE'|false),
  *   reload?: bool,
  *   select_from?: bool,
  *   union?: bool
@@ -319,10 +317,9 @@ class Query
 
         foreach ($expressions as $expr) {
             if (! empty($expr->function)) {
-                $function = strtoupper($expr->function);
-                if ($function === 'COUNT') {
+                if ($expr->function === 'COUNT') {
                     $flags['is_count'] = true;
-                } elseif (in_array($function, static::$FUNCTIONS, true)) {
+                } elseif (in_array($expr->function, static::$FUNCTIONS)) {
                     $flags['is_func'] = true;
                 }
             }
@@ -434,8 +431,6 @@ class Query
             $flags['is_affected'] = true;
         } elseif ($statement instanceof SetStatement) {
             $flags['querytype'] = 'SET';
-        } elseif ($statement instanceof KillStatement) {
-            $flags['querytype'] = 'KILL';
         }
 
         if (
@@ -646,7 +641,7 @@ class Query
         /**
          * The clauses of this type of statement and their index.
          */
-        $clauses = $statement->getClauseOrder();
+        $clauses = array_flip(array_keys($statement->getClauses()));
 
         /**
          * Lexer used for lexing the clause.

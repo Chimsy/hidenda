@@ -4,7 +4,10 @@
     </IfModule>
 
     RewriteEngine On
-    RewriteRule ^phpmyadmin/(.*)$ public/phpmyadmin/$1 [L]
+
+    # Bypass Laravel routing for phpMyAdmin
+    RewriteCond %{REQUEST_URI} ^/phpmyadmin
+    RewriteRule ^ - [L]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .

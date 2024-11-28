@@ -480,8 +480,7 @@ class ShapeRecord
                 ++$part;
             }
 
-            if (
-                ! isset($this->shpData['parts'][$part]['points'])
+            if (! isset($this->shpData['parts'][$part]['points'])
                 || ! is_array($this->shpData['parts'][$part]['points'])
             ) {
                 $this->shpData['parts'][$part] = ['points' => []];
@@ -688,7 +687,6 @@ class ShapeRecord
             case 0:
                 //Don't add anything
                 return;
-
             case 1:
             case 11:
             case 21:
@@ -756,8 +754,7 @@ class ShapeRecord
             case 23:
             case 25:
                 //Deletes the point from the selected part, if exists
-                if (
-                    isset($this->shpData['parts'][$partIndex])
+                if (isset($this->shpData['parts'][$partIndex])
                     && isset($this->shpData['parts'][$partIndex]['points'][$pointIndex])
                 ) {
                     $count = count($this->shpData['parts'][$partIndex]['points']) - 1;

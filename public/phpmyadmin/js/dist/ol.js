@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports.default = void 0;
 var _control = require("ol/control.js");
 var _coordinate = require("ol/coordinate.js");
 var _extent = require("ol/extent.js");
@@ -13,7 +13,7 @@ var _proj = require("ol/proj.js");
 var _source = require("ol/source.js");
 var _style = require("ol/style.js");
 var _ol = require("ol");
-var ol = {
+const ol = {
   control: {
     Attribution: _control.Attribution,
     MousePosition: _control.MousePosition,
@@ -59,4 +59,4 @@ var ol = {
   View: _ol.View
 };
 var _default = ol;
-exports["default"] = _default;
+exports.default = _default;

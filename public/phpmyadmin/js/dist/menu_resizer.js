@@ -146,7 +146,7 @@
 
   /** Public API */
   var methods = {
-    init: function init(widthCalculator) {
+    init: function (widthCalculator) {
       return this.each(function () {
         var $this = $(this);
         if (!$this.data('menuResizer')) {
@@ -154,7 +154,7 @@
         }
       });
     },
-    resize: function resize() {
+    resize: function () {
       return this.each(function () {
         var self = $(this).data('menuResizer');
         if (self) {
@@ -162,7 +162,7 @@
         }
       });
     },
-    destroy: function destroy() {
+    destroy: function () {
       return this.each(function () {
         var self = $(this).data('menuResizer');
         if (self) {

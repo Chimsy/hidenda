@@ -454,7 +454,7 @@ class Formatter
                 // Checking if this clause ended.
                 $isClause = static::isClause($curr);
 
-                if ($isClause !== false) {
+                if ($isClause) {
                     if (
                         ($isClause === 2 || $this->options['clause_newline'])
                         && empty(self::$SHORT_CLAUSES[$lastClause])
@@ -766,8 +766,7 @@ class Formatter
      *
      * @param Token $token the token to be checked
      *
-     * @return int|false
-     * @psalm-return 1|2|false
+     * @return int|bool
      */
     public static function isClause($token)
     {
