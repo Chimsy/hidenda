@@ -2,9 +2,11 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
+        "build:css": "tailwindcss -i ./src/input.css -o ./dist/output.css --minify",
+        "build": "vite build && npm run build:css",
         "dev": "vite"
     },
+
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
         "alpinejs": "^3.4.2",

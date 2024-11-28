@@ -236,7 +236,7 @@ AJAX.registerOnload('table/select.js', function () {
           'column': columnName,
           'range_search': 1
         },
-        success: function (response) {
+        success: function success(response) {
           Functions.ajaxRemoveMessage($msgbox);
           if (response.success) {
             // Get the column min value.
@@ -288,7 +288,7 @@ AJAX.registerOnload('table/select.js', function () {
             Functions.ajaxShowMessage(response.error);
           }
         },
-        error: function () {
+        error: function error() {
           Functions.ajaxShowMessage(Messages.strErrorProcessingRequest);
         }
       });
